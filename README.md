@@ -1,58 +1,49 @@
-# QMK Userspace
+# nstickney's Ortholinear Layout
 
-This is a template repository which allows for an external set of QMK keymaps to be defined and compiled. This is useful for users who want to maintain their own keymaps without having to fork the main QMK repository.
+> Familiar layout for users who regularly switch between Bastyl/Iris and standard QWERTY.
 
-## Howto configure your build targets
+## Install
 
-1. Run the normal `qmk setup` procedure if you haven't already done so -- see [QMK Docs](https://docs.qmk.fm/#/newbs) for details.
-1. Fork this repository
-1. Clone your fork to your local machine
-1. Add a new keymap for your board using `qmk new-keymap`
-    * This will create a new keymap in the `keyboards` directory, in the same location that would normally be used in the main QMK repository. For example, if you wanted to add a keymap for the Planck, it will be created in `keyboards/planck/keymaps/<your keymap name>`
-    * You can also create a new keymap using `qmk new-keymap -kb <your_keyboard> -km <your_keymap>`
-    * Alternatively, add your keymap manually by placing it in the location specified above.
-    * `layouts/<layout name>/<your keymap name>/keymap.*` is also supported if you prefer the layout system
-1. Add your keymap(s) to the build by running `qmk userspace-add -kb <your_keyboard> -km <your_keymap>`
-    * This will automatically update your `qmk.json` file
-    * Corresponding `qmk userspace-remove -kb <your_keyboard> -km <your_keymap>` will delete it
-    * Listing the build targets can be done with with `qmk userspace-list`
-1. Commit your changes
+For instructions on building and installing this keymap, see the [docs](https://docs.qmk.fm/#/getting_started_make_guide).
+Below is the command for me; it may be different for you.
+Note that my Iris keyboard has an Elite-C on the left half and a ProMicro on the right half.
 
-## Howto build with GitHub
+-   Bastyl: `qmk flash -kb hidtech/bastyl -km nstickney`
+-   Iris (OUTDATED; MAY NOT WORK)
+    -   Elite-C: `make keebio/iris/rev2:nstickney:dfu`
+    -   ProMicro: `make keebio/iris/rev2:nstickney:avrdude`
 
-1. In the GitHub Actions tab, enable workflows
-1. Push your changes above to your forked GitHub repository
-1. Look at the GitHub Actions for a new actions run
-1. Wait for the actions run to complete
-1. Inspect the Releases tab on your repository for the latest firmware build
+## Usage
 
-## Howto build locally
+0. QWERTY `BASE` layer.
+    - `/`, `\`, `[SPACE]`, `[ENTER]`, `-`, and `=` on the thumb clusters.
+        - `[` and `]` added on Bastyl.
+    - `CAPSLOCK` replaced by `ESC`; hold it down for `CTRL`.
+        - `'` can also be held for `CTRL`.
+    - [Space-Cadet Shift](https://beta.docs.qmk.fm/using-qmk/advanced-keycodes/feature_space_cadet) is enabled, so the `SHIFT` keys send `(` and `)` when tapped.
+    - Hold down `/` or `=` for `ALT`.
+    - Hold down `\` or `-` to access the functions layer.
+    - Farthest thumb keys are `GUI` (left) and `MENU` (right).
+        - Tapping `GUI` 2, 3, or 4 times will toggle `NUMLOCK`, `CAPSLOCK`, or `SCROLLLOCK`, respectively.
+        - Tapping `MENU` 2 or 3 times will toggle the `NUMP` and `SYMB` layers, respectively.
+1. Unicode-input symbols on `SYMB` layer. Based (loosely) on US-International layout.
+2. `NUMP` layer has number pads on each hand. Number pad `7`-`8`-`9` align with QWERTY `7`-`8`-`9` on right hand.
+3. Function, arrow, media, and miscellaneous keys on `FCTN` layer.
+    - `F1` through `F10` on `1`-`10`. `F11` is on `GUI` and `F12` is on `MENU`.
+    - Brackets (`[` and `]`) available on `U` and `I`; braces (`{` and `}`) on `O` and `P`.
+    - Arrow keys on `ESDF` and `HJKL`; familiar for both Vim users and FPS gamers.
+    - `W` is `HOME`; `R` is `END`. `T` is `PAGE UP` and `G` is `PAGE DOWN`.
+    - Music controls on lower row of left hand.
+    - Volume and screen brightness on lower row of right hand.
+    - `PRINT SCREEN`, `PAUSE`, `SYSREQ`, `INSERT`, and `CLEAR` also mapped, as intelligently as possible.
+    - `Q` toggles the RGB underglow (which changes color to indicate active layer).
+    - `A` increases RGB underglow brightness (with `SHIFT`, decreases brightness).
+    - `Y` is mapped to [`KC_LOCK`](https://beta.docs.qmk.fm/using-qmk/software-features/feature_key_lock).
 
-1. Run the normal `qmk setup` procedure if you haven't already done so -- see [QMK Docs](https://docs.qmk.fm/#/newbs) for details.
-1. Fork this repository
-1. Clone your fork to your local machine
-1. `cd` into this repository's clone directory
-1. Set global userspace path: `qmk config user.overlay_dir="$(realpath .)"` -- you MUST be located in the cloned userspace location for this to work correctly
-    * This will be automatically detected if you've `cd`ed into your userspace repository, but the above makes your userspace available regardless of your shell location.
-1. Compile normally: `qmk compile -kb your_keyboard -km your_keymap` or `make your_keyboard:your_keymap`
+## Contribute
 
-Alternatively, if you configured your build targets above, you can use `qmk userspace-compile` to build all of your userspace targets at once.
+If you are using this layout and think you've found a better way to do something, I'd appreciate an [issue](https://github.com/nstickney/qmk_firmware/issues), or better yet a [pull request](https://github.com/nstickney/qmk_firmware/pulls).
 
-## Extra info
+## License
 
-If you wish to point GitHub actions to a different repository, a different branch, or even a different keymap name, you can modify `.github/workflows/build_binaries.yml` to suit your needs.
-
-To override the `build` job, you can change the following parameters to use a different QMK repository or branch:
-```
-    with:
-      qmk_repo: qmk/qmk_firmware
-      qmk_ref: master
-```
-
-If you wish to manually manage `qmk_firmware` using git within the userspace repository, you can add `qmk_firmware` as a submodule in the userspace directory instead. GitHub Actions will automatically use the submodule at the pinned revision if it exists, otherwise it will use the default latest revision of `qmk_firmware` from the main repository.
-
-This can also be used to control which fork is used, though only upstream `qmk_firmware` will have support for external userspace until other manufacturers update their forks.
-
-1. (First time only) `git submodule add https://github.com/qmk/qmk_firmware.git`
-1. (To update) `git submodule update --init --recursive`
-1. Commit your changes to your userspace repository
+Copyright &copy; 2016-2021 @nstickney. Released under [GPL-2.0](/LICENSE).
