@@ -12,7 +12,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-SRC += nstickney.c
 
 KEY_LOCK_ENABLE = yes
 RGBLIGHT_ENABLE = yes
@@ -20,6 +19,9 @@ TAP_DANCE_ENABLE = yes
 UNICODE_ENABLE = no
 UNICODEMAP_ENABLE = yes
 UCIS_ENABLE = no
+
+# https://github.com/qmk/qmk_firmware/issues/24530
+INTROSPECTION_KEYMAP_C = nstickney.c
 
 # https://github.com/qmk/qmk_firmware/issues/3224#issuecomment-399769416
 LTO_ENABLE = yes
